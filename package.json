@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Henry",
-  "license": "ISC",
+  "author": "the-furry-hubofeverything",
+  "license": "MPL",
   "devDependencies": {
     "eslint": "^6.6.0"
   },
