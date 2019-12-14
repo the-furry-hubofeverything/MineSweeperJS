@@ -191,6 +191,13 @@ const init = s => {
               }
             }
             c.gi.flag = !c.gi.flag;
+            if (
+              parseInt(document.getElementById("flags").innerText) <= 0 &&
+              c.gi.flag
+            ) {
+              c.gi.flag = !c.gi.flag;
+              return false;
+            }
             if (c.gi.flag) {
               document.getElementById("flags").innerText =
                 parseInt(document.getElementById("flags").innerText) - 1;
