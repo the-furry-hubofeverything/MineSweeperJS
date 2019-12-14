@@ -1,28 +1,31 @@
-/* https://www.colorbox.io/#steps=6#hue_start=254#hue_end=309#hue_curve=easeInQuad#sat_start=15#sat_end=77#sat_curve=easeOutCubic#sat_rate=130#lum_start=100#lum_end=73#lum_curve=easeOutQuad#minor_steps_map=0 */
+/* Coolors Exported Palette - coolors.co/c0cfdb-75b4d6-55a4c6-a03b43-193142 */
 
-/* {
-    "0": "#d9cdff",
-    "5": "#b298fd",
-    "10": "#8f64fc",
-    "20": "#7728f5",
-    "30": "#8b0de8",
-    "40": "#b602d4",
-    "50": "#ba009e"
-} */
+/* RGB */
+/* $color1: rgba(192, 207, 219, 1); white
+$color2: rgba(117, 180, 214, 1); tissue paper blue
+$color3: rgba(23, 110, 147, 1); sky blue
+$color4: rgba(160, 59, 67, 1);
+$color5: rgba(25, 49, 66, 1); dark blue */
 
 body {
   margin-top: 10%;
   display: flex;
-  color: #fff;
+  color: rgba(25, 49, 66, 1);
   font-family: sans-serif;
-  background: #d9cdff;
+  background: rgba(25, 49, 66, 1);
+}
+
+mark {
+  padding: 5px;
+  color: rgba(25, 49, 66, 1);
+  background: rgba(192, 207, 219, 1);
 }
 
 #sidebar {
-  margin-left: 2.5%;
-  background: #7728f5;
-  padding: 10px;
+  color: rgba(192, 207, 219, 1);
+  padding: 20px;
   width: 15%;
+  text-align: right;
 }
 
 /* grabbed from w3schools */
@@ -45,38 +48,37 @@ body {
 /* end grabbed section */
 
 td {
-  /* width: 25px; */
-  background: #7728f5;
+  background: rgba(117, 180, 214, 1);
   font-size: 0.8em;
-  color: #7728f5;
+  color: rgba(117, 180, 214, 1);
   user-select: none;
 }
 
 td:hover {
-  background: #8b0de8;
-  color: #8b0de8;
+  background: rgb(55, 108, 131);
+  color: rgb(55, 108, 131);
 }
 
 .flag {
-  background: #ba009e;
-  color: #ba009e;
+  background: rgba(160, 59, 67, 1);
+  color: rgba(160, 59, 67, 1);
 }
 
 .flag:hover {
-  background: #b602d4;
-  color: #b602d4;
+  background: rgb(110, 40, 46);
+  color: rgb(110, 40, 46);
 }
 
 .revealed,
 .revealed:hover {
-  background: #b298fd;
+  background: rgba(23, 110, 147, 1);
 }
 
 table {
   table-layout: fixed;
-  margin: auto;
   width: 500px;
-  background: #b298fd;
+  text-align: center;
+  background: rgba(25, 49, 66, 1);
 }
 
 body {

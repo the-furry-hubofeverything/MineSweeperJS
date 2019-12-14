@@ -113,7 +113,12 @@ class gi {
               backgroundColor: [
                 { value: "#ff0", easing: "easeOutCubic", duration: 100 },
                 "#f00",
-                "#444"
+                "#000"
+              ],
+              color: [
+                { value: "#ff0", easing: "easeOutCubic", duration: 100 },
+                "#f00",
+                "#000"
               ],
               delay: anime.stagger(250, {
                 grid: [grid.length, grid.length],
@@ -167,6 +172,7 @@ const init = s => {
     // I don't want to deal with 1mil x 1mil grids
     console.error("Grid Size out of range, aborting...");
     window.alert("Internal Error (Grid out of range)");
+    location.reload();
     return;
   } else {
     let m = Math.ceil(Math.sqrt(s) + 8) / 100;
