@@ -1,5 +1,6 @@
 /* global anime*/
 // Note: ALL console.log WILL BE REMOVED WHEN PROJECT IS FINISHED
+// TODO: reveals when explode, color code hints, UI scaling
 
 // prompt. Ew. Change later
 var grid; // Grid are [y][x] due to structure of the table
@@ -102,14 +103,9 @@ class gi {
             explode.add({
               targets: "td",
               scale: [
-                { value: 0.01, easing: "easeOutCubic", duration: 10 },
+                { value: 0.1, easing: "easeOutCubic", duration: 10 },
                 { value: 1, easing: "easeInSine", duration: 150 }
               ],
-              translateZ: anime.stagger([0, 20, 0], {
-                grid: [grid.length, grid.length],
-                from: "center",
-                axis: "y"
-              }),
               backgroundColor: [
                 { value: "#ff0", easing: "easeOutCubic", duration: 100 },
                 "#f00",
@@ -204,6 +200,22 @@ const init = s => {
               c.gi.flag = !c.gi.flag;
               return false;
             }
+            anime({
+              targets: "p mark",
+              backgroundColor: [
+                {
+                  value: "rgba(192, 207, 219, 1)",
+                  easing: "linear",
+                  duration: 50
+                },
+                {
+                  value: "rgba(160, 59, 67, 1)",
+                  easing: "linear",
+                  duration: 50
+                },
+                "rgba(192, 207, 219, 1)"
+              ]
+            });
             if (c.gi.flag) {
               document.getElementById("flags").innerText =
                 parseInt(document.getElementById("flags").innerText) - 1;
@@ -221,7 +233,8 @@ const init = s => {
         };
 
         // dynamic sizing
-        c.style.height = 375 / s + "px";
+        c.style.height =
+          document.getElementById("grid").offsetWidth / s - 5 + "px";
         c.gi = new gi(b + s * a);
         c.innerHTML = "0";
 

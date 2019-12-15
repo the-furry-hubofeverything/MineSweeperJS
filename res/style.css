@@ -7,10 +7,14 @@ $color3: rgba(23, 110, 147, 1); sky blue
 $color4: rgba(160, 59, 67, 1);
 $color5: rgba(25, 49, 66, 1); dark blue */
 
+h1 {
+  font-weight: bold;
+  font-size: 5em;
+  text-align: center;
+}
+
 body {
-  margin-top: 10%;
-  display: flex;
-  color: rgba(25, 49, 66, 1);
+  color: rgba(192, 207, 219, 1);
   font-family: sans-serif;
   background: rgba(25, 49, 66, 1);
 }
@@ -21,11 +25,18 @@ mark {
   background: rgba(192, 207, 219, 1);
 }
 
-#sidebar {
+main {
+  max-width: 960px;
+  margin: auto;
   color: rgba(192, 207, 219, 1);
+  display: flex;
   padding: 20px;
   width: 15%;
   text-align: right;
+}
+
+#info {
+  padding-right: 10px;
 }
 
 /* grabbed from w3schools */
@@ -49,14 +60,13 @@ mark {
 
 td {
   background: rgba(117, 180, 214, 1);
-  font-size: 0.8em;
   color: rgba(117, 180, 214, 1);
   user-select: none;
 }
 
 td:hover {
-  background: rgb(55, 108, 131);
-  color: rgb(55, 108, 131);
+  background: rgb(104, 160, 190);
+  color: rgb(104, 160, 190);
 }
 
 .flag {
@@ -65,22 +75,20 @@ td:hover {
 }
 
 .flag:hover {
-  background: rgb(110, 40, 46);
-  color: rgb(110, 40, 46);
+  background: rgb(128, 47, 54);
+  color: rgb(128, 47, 54);
 }
 
 .revealed,
 .revealed:hover {
+  color: rgb(255, 255, 255);
+  font-weight: bold;
   background: rgba(23, 110, 147, 1);
 }
 
 table {
   table-layout: fixed;
-  width: 500px;
+  width: 750px;
   text-align: center;
   background: rgba(25, 49, 66, 1);
-}
-
-body {
-  perspective: 250px;
 }
