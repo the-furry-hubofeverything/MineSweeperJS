@@ -10,6 +10,9 @@ var p = []; // position (neighbor)
 var explode;
 var start;
 var size;
+const hintColor = JSON.parse(
+  '{"0":"#00f","1":"#00cf00","2":"#087800","3":"#000078","4":"#780000","5":"#007872","6":"#000","7":"#333"}'
+);
 
 function render() {
   // Handles all CSS class changes
@@ -23,6 +26,10 @@ function render() {
         b.classList.add("flag");
       } else if (!b.gi.flag) {
         b.classList.remove("flag");
+      }
+
+      if (parseInt(b.innerHTML) >= 1 && !b.gi.hidden) {
+        b.style.background = hintColor[b.innerHTML - 1];
       }
     });
   });
@@ -204,16 +211,14 @@ const init = s => {
               targets: "p mark",
               backgroundColor: [
                 {
-                  value: "rgba(192, 207, 219, 1)",
-                  easing: "linear",
-                  duration: 50
+                  value: "rgba(160, 59, 67, 1)",
+                  duration: 0
                 },
                 {
-                  value: "rgba(160, 59, 67, 1)",
-                  easing: "linear",
-                  duration: 50
-                },
-                "rgba(192, 207, 219, 1)"
+                  value: "rgba(192, 207, 219, 1)",
+                  easing: "easeOutCubic",
+                  duration: 500
+                }
               ]
             });
             if (c.gi.flag) {
@@ -268,10 +273,10 @@ const init = s => {
       }
     });
 
-    // clear hints that are 0
+    // clear hints that are 0, add colours
     grid.forEach(a => {
       a.forEach(b => {
-        if (b.innerHTML == "0" || b.mine === true) {
+        if (b.innerHTML == "0" || b.gi.mine === true) {
           b.innerHTML = "";
         }
       });
@@ -301,11 +306,16 @@ const init = s => {
 
 function GameStart(customMessage) {
   document.getElementById("overlay").style.display = "block";
+  if (customMessage) {
+    document.getElementById("intro").innerHTML = customMessage;
+  } else {
+    document.getElementById("intro").innerHTML = "Grid Size?";
+  }
 
-  size = parseInt(
-    window.prompt(customMessage ? customMessage + ", Grid Size" : "Grid Size")
-  );
-  init(size);
+  document.getElementsByTagName("button")[0].addEventListener("click", () => {
+    size = parseInt(document.getElementById("set").value);
+    init(size);
+  });
 }
 
 GameStart();
