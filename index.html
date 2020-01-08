@@ -12,9 +12,11 @@
     <h1>MINESWEEPERjs</h1>
     <div id="overlay">
       <div id="box">
-        <p id="intro"></p>
-        <input type="number" id="set" max="30" min="5" />
-        <button>Start game!</button>
+        <form onsubmit="init(); return false;">
+          <p id="intro"></p>
+          <input type="number" id="set" max="30" min="5" />
+          <button>Start game!</button>
+        </form>
       </div>
     </div>
     <main>

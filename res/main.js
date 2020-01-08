@@ -1,91 +1,14 @@
 /* global anime*/
-// Note: ALL console.log WILL BE REMOVED WHEN PROJECT IS FINISHED
-// TODO: reveals when explode, color code hints, UI scaling
 
-// prompt. Ew. Change later
 var grid; // Grid are [y][x] due to structure of the table
 var flag = 0;
 var ui = document.getElementById("grid");
 var p = []; // position (neighbor)
 var explode;
 var start;
-var size;
 const hintColor = JSON.parse(
   '{"0":"#00f","1":"#00cf00","2":"#087800","3":"#000078","4":"#780000","5":"#007872","6":"#000","7":"#333"}'
 );
-
-function render() {
-  // Handles all CSS class changes
-  grid.forEach(a => {
-    a.forEach(b => {
-      if (!b.gi.hidden) {
-        b.classList.add("revealed");
-      }
-
-      if (b.gi.flag) {
-        b.classList.add("flag");
-      } else if (!b.gi.flag) {
-        b.classList.remove("flag");
-      }
-
-      if (parseInt(b.innerHTML) >= 1 && !b.gi.hidden) {
-        b.style.background = hintColor[b.innerHTML - 1];
-      }
-    });
-  });
-}
-
-function reveal(gi) {
-  // Boundary fill (check edge of grid and border but reveal hints)
-
-  let r = 0;
-  let pos = new Uint16Array(2);
-  pos = [Math.trunc(gi.id / grid.length), gi.id % grid.length];
-
-  if (parseInt(grid[pos[0]][pos[1]].innerHTML) > 0) {
-    // stop for if hint
-    return;
-  } else {
-    // horizontal (left, right)
-    for (let i = pos[1] - 1; i < pos[1] + 2; i++) {
-      if (i == pos[1] || i < 0 || i >= grid.length) {
-        // check if same or out of range
-        continue;
-      }
-
-      if (!grid[pos[0]][i].gi.mine && grid[pos[0]][i].gi.hidden) {
-        grid[pos[0]][i].gi.hidden = false;
-        grid[pos[0]][i].gi.flag = false;
-        r++;
-        p.push(grid[pos[0]][i]);
-      }
-    }
-
-    // vertical (top, bottom)
-    for (let i = pos[0] - 1; i < pos[0] + 2; i++) {
-      if (i == pos[0] || i < 0 || i >= grid.length) {
-        continue;
-      }
-
-      if (!grid[i][pos[1]].gi.mine && grid[i][pos[1]].gi.hidden) {
-        grid[i][pos[1]].gi.hidden = false;
-        grid[i][pos[1]].gi.flag = false;
-        r++;
-        p.push(grid[i][pos[1]]);
-      }
-    }
-
-    if (r > 0) {
-      p.forEach(i => {
-        if (!i.chk) {
-          i.chk = true;
-          reveal(i.gi);
-        }
-      });
-      p = [];
-    }
-  }
-}
 
 // gi - Grid Item
 class gi {
@@ -131,6 +54,7 @@ class gi {
                 // END GAME
 
                 GameStart("MINE EXPLODED");
+                blink("#box", "rgba(160, 59, 67, 1)", "rgba(23, 110, 147, 1)");
               }
             });
 
@@ -146,9 +70,110 @@ class gi {
   }
 }
 
+const blink = (element, color1, color2) =>
+  anime({
+    targets: element,
+    backgroundColor: [
+      {
+        value: color1,
+        duration: 0
+      },
+      {
+        value: color2,
+        easing: "easeOutCubic",
+        duration: 500
+      }
+    ]
+  });
+
+function render(end) {
+  // Handles all CSS class changes
+  grid.forEach(a => {
+    a.forEach(b => {
+      if (end && !b.gi.mine) {
+        b.classList.add("revealed");
+      }
+
+      if (!b.gi.hidden) {
+        b.classList.add("revealed");
+      }
+
+      if (b.gi.flag) {
+        b.classList.add("flag");
+      } else if (!b.gi.flag) {
+        b.classList.remove("flag");
+      }
+
+      // adding hint colors
+      if (parseInt(b.innerHTML) >= 1 && !b.gi.hidden) {
+        b.style.background = hintColor[b.innerHTML - 1];
+      }
+    });
+  });
+}
+
+function reveal(gi) {
+  // Boundary fill (check edge of grid and border but reveal hints)
+
+  let r = 0;
+  let pos = [Math.trunc(gi.id / grid.length), gi.id % grid.length];
+
+  if (parseInt(grid[pos[0]][pos[1]].innerHTML) > 0) {
+    // stop for if hint
+    return;
+  } else {
+    // horizontal (left, right)
+    for (let i = pos[1] - 1; i < pos[1] + 2; i++) {
+      if (i == pos[1] || i < 0 || i >= grid.length) {
+        // check if same or out of range
+        continue;
+      }
+
+      // if it's not an mine and it's hidden
+      if (!grid[pos[0]][i].gi.mine && grid[pos[0]][i].gi.hidden) {
+        // reveal
+        grid[pos[0]][i].gi.hidden = false;
+        grid[pos[0]][i].gi.flag = false;
+        r++;
+        p.push(grid[pos[0]][i]);
+      }
+    }
+
+    // vertical (top, bottom)
+    // basically just same to the horizontal, but now with vertical
+    for (let i = pos[0] - 1; i < pos[0] + 2; i++) {
+      if (i == pos[0] || i < 0 || i >= grid.length) {
+        continue;
+      }
+
+      if (!grid[i][pos[1]].gi.mine && grid[i][pos[1]].gi.hidden) {
+        grid[i][pos[1]].gi.hidden = false;
+        grid[i][pos[1]].gi.flag = false;
+        r++;
+        p.push(grid[i][pos[1]]);
+      }
+    }
+
+    // prevents infinite loops
+    if (r > 0) {
+      p.forEach(i => {
+        if (!i.chk) {
+          i.chk = true;
+          reveal(i.gi);
+        }
+      });
+      p = [];
+    }
+  }
+}
+
 // Grid init
 // The grid. A digital frontier. I tried to... wait, wrong game
-const init = s => {
+const init = () => {
+  let set = document.getElementById("set");
+
+  let s = parseInt(set.value);
+
   document.getElementById("overlay").style.display = "none";
   document.getElementById("grid").innerHTML = "";
   document.getElementById("size").innerHTML = s;
@@ -173,84 +198,79 @@ const init = s => {
 
   if ((s > 30) | (s < 5) || !s) {
     // I don't want to deal with 1mil x 1mil grids
+    document.getElementById("overlay").style.display = "block";
     console.error("Grid Size out of range, aborting...");
-    window.alert("Internal Error (Grid out of range)");
-    location.reload();
+    document.getElementById("intro").innerHTML =
+      "Size invalid, please try again";
+
+    blink("#box", "rgba(160, 59, 67, 1)", "rgba(23, 110, 147, 1)");
     return;
   } else {
     let m = Math.ceil(Math.sqrt(s) + 8) / 100;
 
-    for (let a = 0; a < s; a++) {
-      // Yes, we are working with table grids again. Dang it.
-      let r = ui.insertRow(-1);
-      grid[a] = new Array(s).fill();
+    while (flag == 0) {
+      for (let a = 0; a < s; a++) {
+        // Yes, we are working with table grids again. Dang it.
+        let r = ui.insertRow(-1);
+        grid[a] = new Array(s).fill();
 
-      for (let b = 0; b < s; b++) {
-        let c = r.insertCell(-1);
-        grid[a][b] = c;
+        for (let b = 0; b < s; b++) {
+          let c = r.insertCell(-1);
+          grid[a][b] = c;
 
-        // Right Click handling
-        c.oncontextmenu = () => {
-          if (c.gi.hidden) {
-            if (c.gi.mine) {
-              if (flag > 0 && !c.gi.flag) {
-                flag -= 1;
-              } else {
-                flag += 1;
-              }
-            }
-            c.gi.flag = !c.gi.flag;
-            if (
-              parseInt(document.getElementById("flags").innerText) <= 0 &&
-              c.gi.flag
-            ) {
-              c.gi.flag = !c.gi.flag;
-              return false;
-            }
-            anime({
-              targets: "p mark",
-              backgroundColor: [
-                {
-                  value: "rgba(160, 59, 67, 1)",
-                  duration: 0
-                },
-                {
-                  value: "rgba(192, 207, 219, 1)",
-                  easing: "easeOutCubic",
-                  duration: 500
+          // Right Click handling
+          c.oncontextmenu = () => {
+            if (c.gi.hidden) {
+              if (c.gi.mine) {
+                if (flag > 0 && !c.gi.flag) {
+                  flag -= 1;
+                } else {
+                  flag += 1;
                 }
-              ]
-            });
-            if (c.gi.flag) {
-              document.getElementById("flags").innerText =
-                parseInt(document.getElementById("flags").innerText) - 1;
-            } else {
-              document.getElementById("flags").innerText =
-                parseInt(document.getElementById("flags").innerText) + 1;
+              }
+              c.gi.flag = !c.gi.flag;
+              if (
+                parseInt(document.getElementById("flags").innerText) <= 0 &&
+                c.gi.flag
+              ) {
+                c.gi.flag = !c.gi.flag;
+                return false;
+              }
+
+              if (c.gi.flag) {
+                document.getElementById("flags").innerText =
+                  parseInt(document.getElementById("flags").innerText) - 1;
+              } else {
+                document.getElementById("flags").innerText =
+                  parseInt(document.getElementById("flags").innerText) + 1;
+              }
+              render();
+
+              blink("p mark", "rgba(160, 59, 67, 1)", "rgba(192, 207, 219, 1)");
             }
-            render();
-          }
-          if (flag === 0) {
-            // eww
-            window.alert("WIN!");
-          }
-          return false;
-        };
+            if (flag === 0) {
+              GameStart("You won!");
+              render(true);
+              blink("#box", "rgba(255, 255, 0, 1)", "rgba(23, 110, 147, 1)");
+            }
+            return false;
+          };
 
-        // dynamic sizing
-        c.style.height =
-          document.getElementById("grid").offsetWidth / s - 5 + "px";
-        c.gi = new gi(b + s * a);
-        c.innerHTML = "0";
+          // dynamic sizing
+          c.style.height =
+            document.getElementById("grid").offsetWidth / s - 5 + "px";
+          c.gi = new gi(b + s * a);
+          c.innerHTML = "0";
 
-        // mine generation
-        if (Math.random() < m) {
-          c.gi.mine = true;
-          ml.push([a, b]);
-          flag += 1;
+          // mine generation
+          if (Math.random() < m) {
+            c.gi.mine = true;
+            ml.push([a, b]);
+            flag += 1;
+          }
+
+          c.addEventListener("click", c.gi.update);
         }
-
-        c.addEventListener("click", c.gi.update);
       }
     }
 
@@ -273,7 +293,7 @@ const init = s => {
       }
     });
 
-    // clear hints that are 0, add colours
+    // clear hints that are 0
     grid.forEach(a => {
       a.forEach(b => {
         if (b.innerHTML == "0" || b.gi.mine === true) {
@@ -306,6 +326,7 @@ const init = s => {
 
 function GameStart(customMessage) {
   document.getElementById("overlay").style.display = "block";
+
   if (customMessage) {
     document.getElementById("intro").innerHTML = customMessage;
   } else {
@@ -313,8 +334,7 @@ function GameStart(customMessage) {
   }
 
   document.getElementsByTagName("button")[0].addEventListener("click", () => {
-    size = parseInt(document.getElementById("set").value);
-    init(size);
+    init();
   });
 }
 
