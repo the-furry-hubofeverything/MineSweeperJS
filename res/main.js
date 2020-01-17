@@ -118,6 +118,13 @@ function reveal(gi) {
   let r = 0;
   let pos = [Math.trunc(gi.id / grid.length), gi.id % grid.length];
 
+  // Anti cheat. I'm not focusing on this, but it prevents the most stupid one
+  if (grid[pos[0]][pos[1]].gi.mine) {
+    console.error("Cheating detected");
+    GameStart("reveal() is a good boy, leave him alone");
+    blink("#box", "rgba(160, 59, 67, 1)", "rgba(23, 110, 147, 1)");
+  }
+
   if (parseInt(grid[pos[0]][pos[1]].innerHTML) > 0) {
     // stop for if hint
     return;
