@@ -8,14 +8,16 @@ $color4: rgba(160, 59, 67, 1);
 $color5: rgba(25, 49, 66, 1); dark blue */
 
 h1 {
-  font-weight: bold;
+  font-weight: 500;
   font-size: 5em;
   text-align: center;
+  font-family: "Palanquin Dark", sans-serif;
+  margin-top: 0px;
 }
 
 body {
   color: rgb(193, 208, 220);
-  font-family: sans-serif;
+  font-family: "Nunito", sans-serif;
   background: rgba(25, 49, 66, 1);
 }
 

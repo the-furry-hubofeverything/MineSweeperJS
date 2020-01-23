@@ -1,4 +1,6 @@
-/* global anime*/
+/* global anime */
+
+// Note: Mine on first hit is EXPECTED behavior.
 
 var grid; // Grid are [y][x] due to structure of the table
 var flag = 0;
@@ -24,6 +26,7 @@ class gi {
             // Prevents click on flag. Do not remove.
             return;
           } else if (this.mine) {
+            // When mine is hit
             // Prevents click on grid while animating
             document.querySelectorAll("td").forEach(i => {
               i.style.pointerEvents = "none";
@@ -61,8 +64,10 @@ class gi {
             explode.play();
             return;
           } else {
+            // if normal
             reveal(this);
           }
+          // no matter the update, the gi is not hidden anymore
           this.hidden = false;
         }
         render();
@@ -70,6 +75,7 @@ class gi {
   }
 }
 
+// Blink Animation, takes in color and blinks to other color
 const blink = (element, color1, color2) =>
   anime({
     targets: element,
@@ -86,10 +92,12 @@ const blink = (element, color1, color2) =>
     ]
   });
 
+// Refreshes grid
 function render(end) {
   // Handles all CSS class changes
   grid.forEach(a => {
     a.forEach(b => {
+      // matching classes to see if they apply
       if (end && !b.gi.mine) {
         b.classList.add("revealed");
       }
@@ -112,6 +120,7 @@ function render(end) {
   });
 }
 
+// Clicks and performs Boundary fill
 function reveal(gi) {
   // Boundary fill (check edge of grid and border but reveal hints)
 
@@ -181,6 +190,7 @@ const init = () => {
 
   let s = parseInt(set.value);
 
+  // Disable overlay, sets up side panel
   document.getElementById("overlay").style.display = "none";
   document.getElementById("grid").innerHTML = "";
   document.getElementById("size").innerHTML = s;
@@ -213,15 +223,20 @@ const init = () => {
     blink("#box", "rgba(160, 59, 67, 1)", "rgba(23, 110, 147, 1)");
     return;
   } else {
+    // Mine Spawn Probability
     let m = Math.ceil(Math.sqrt(s) + 8) / 100;
 
     while (flag == 0) {
       for (let a = 0; a < s; a++) {
         // Yes, we are working with table grids again. Dang it.
+
+        // Grid Array fill setup
         let r = ui.insertRow(-1);
         grid[a] = new Array(s).fill();
 
+        // for each cell
         for (let b = 0; b < s; b++) {
+          // add cell
           let c = r.insertCell(-1);
           grid[a][b] = c;
 
@@ -285,6 +300,7 @@ const init = () => {
 
     // Hint Generation
     ml.forEach(a => {
+      // add 1 to 3x3 area with mine in centre
       for (let b = a[1] - 1; b < a[1] + 2; b++) {
         if (b + 1 !== s + 1 && b >= 0) {
           if (a[0] - 1 >= 0) {
@@ -331,6 +347,7 @@ const init = () => {
   }
 };
 
+// Executed on new game, prompt for size
 function GameStart(customMessage) {
   document.getElementById("overlay").style.display = "block";
 
@@ -345,4 +362,5 @@ function GameStart(customMessage) {
   });
 }
 
+// Init
 GameStart();
