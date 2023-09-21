@@ -125,7 +125,7 @@ function reveal(gi) {
   // Boundary fill (check edge of grid and border but reveal hints)
 
   let r = 0;
-  let pos = [Math.trunc(gi.id / grid.length), gi.id % grid.length];
+  let pos = [Math.trunc(gi.id / grid.length), gi.id % grid.length]; // y, x
 
   // Anti cheat. I'm not focusing on this, but it prevents the most stupid one
   if (grid[pos[0]][pos[1]].gi.mine) {
@@ -138,35 +138,23 @@ function reveal(gi) {
     // stop for if hint
     return;
   } else {
-    // horizontal (left, right)
-    for (let i = pos[1] - 1; i < pos[1] + 2; i++) {
-      if (i == pos[1] || i < 0 || i >= grid.length) {
-        // check if same or out of range
-        continue;
-      }
 
-      // if it's not an mine and it's hidden
-      if (!grid[pos[0]][i].gi.mine && grid[pos[0]][i].gi.hidden) {
-        // reveal
-        grid[pos[0]][i].gi.hidden = false;
-        grid[pos[0]][i].gi.flag = false;
-        r++;
-        p.push(grid[pos[0]][i]);
-      }
-    }
+    // The horizontal and vertical approach can't do diagnals. 
+    // Nested for loops are unavoidable with 2 dimensional data structures.
+    for (let y = pos[0] - 1; y < pos[0] + 2; y++) {
+      for (let x = pos[1] - 1; x < pos[1] + 2; x++) {
+        if ((x == pos[1] && y == pos [0]) || x < 0 || x >= grid.length || y < 0 || y >= grid.length) {
+          // check if same or out of range
+          continue
+        }
 
-    // vertical (top, bottom)
-    // basically just same to the horizontal, but now with vertical
-    for (let i = pos[0] - 1; i < pos[0] + 2; i++) {
-      if (i == pos[0] || i < 0 || i >= grid.length) {
-        continue;
-      }
-
-      if (!grid[i][pos[1]].gi.mine && grid[i][pos[1]].gi.hidden) {
-        grid[i][pos[1]].gi.hidden = false;
-        grid[i][pos[1]].gi.flag = false;
-        r++;
-        p.push(grid[i][pos[1]]);
+        if (!grid[y][x].gi.mine && grid[y][x].gi.hidden) {
+          // reveal
+          grid[y][x].gi.hidden = false;
+          grid[y][x].gi.flag = false;
+          r++;
+          p.push(grid[y][x]);
+        }
       }
     }
 
