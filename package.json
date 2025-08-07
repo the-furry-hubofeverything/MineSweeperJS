@@ -9,7 +9,7 @@
   "author": "the-furry-hubofeverything",
   "license": "MPL",
   "devDependencies": {
-    "eslint": "^6.6.0"
+    "eslint": "^9.32.0"
   },
   "dependencies": {}
 }
